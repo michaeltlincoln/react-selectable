@@ -55,9 +55,9 @@ class SelectableGroup extends Component {
     this._applyMousedown(false);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.enabled !== this.props.enabled) {
-      this._applyMousedown(nextProps.enabled);
+  componentDidUpdate(prevProps) {
+    if (this.props.enabled !== prevProps.enabled) {
+      this._applyMousedown(this.props.enabled);
     }
   }
 
