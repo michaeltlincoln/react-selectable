@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { findDOMNode } from "react-dom";
 import PropTypes from "prop-types";
 import cx from "classnames";
@@ -7,8 +7,6 @@ import isNodeIn from "./isNodeIn";
 import getBoundsForNode from "./getBoundsForNode";
 import doObjectsCollide from "./doObjectsCollide";
 import throttle from "lodash.throttle";
-
-const SELECTING_BOX_HTML_ID = "active-selecting-box";
 
 class SelectableGroup extends Component {
   constructor(props) {
@@ -19,6 +17,8 @@ class SelectableGroup extends Component {
       boxWidth: 0,
       boxHeight: 0,
     };
+
+    this.selectionBoxRef = createRef();
 
     this._mouseDownData = null;
     this._rect = null;
@@ -211,14 +211,14 @@ class SelectableGroup extends Component {
 
     const currentItems = [];
 
-    const _selectbox = document.getElementById(SELECTING_BOX_HTML_ID);
+    const _selectBox = this.selectionBoxRef.current;
 
-    if (!_selectbox) return;
+    if (!_selectBox) return;
 
     this._registry.forEach((itemData) => {
       if (
         itemData.domNode &&
-        doObjectsCollide(_selectbox, itemData.domNode, tolerance) &&
+        doObjectsCollide(_selectBox, itemData.domNode, tolerance) &&
         !currentItems.includes(itemData.key)
       ) {
         currentItems.push(itemData.key);
@@ -275,7 +275,7 @@ class SelectableGroup extends Component {
         style={wrapperStyle}
       >
         {isBoxSelecting ? (
-          <div style={boxStyle} id=SELECTING_BOX_HTML_ID>
+          <div style={boxStyle} ref={this.selectionBoxRef}>
             <span style={spanStyle} />
           </div>
         ) : null}
