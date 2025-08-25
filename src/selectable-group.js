@@ -237,13 +237,19 @@ class SelectableGroup extends Component {
    * @return {ReactComponent}
    */
   render() {
-    const { children, enabled, fixedPosition, className, selectingClassName } =
-      this.props;
+    const {
+      children,
+      enabled,
+      fixedPosition,
+      className,
+      selectingClassName,
+      component: Component,
+      ...restProps
+    } = this.props;
     const { isBoxSelecting, boxLeft, boxTop, boxWidth, boxHeight } = this.state;
-    const Component = this.props.component;
 
     if (!enabled) {
-      return <Component className={className}>{children}</Component>;
+      return <Component {...restProps} className={className}>{children}</Component>;
     }
 
     const boxStyle = {
@@ -254,6 +260,7 @@ class SelectableGroup extends Component {
       zIndex: 9000,
       position: fixedPosition ? "fixed" : "absolute",
       cursor: "default",
+      pointerEvents: "none",
     };
 
     const spanStyle = {
@@ -267,10 +274,12 @@ class SelectableGroup extends Component {
     const wrapperStyle = {
       position: "relative",
       overflow: "visible",
+      ...restProps.style,
     };
 
     return (
       <Component
+        {...restProps}
         className={cx(className, isBoxSelecting ? selectingClassName : null)}
         style={wrapperStyle}
       >
