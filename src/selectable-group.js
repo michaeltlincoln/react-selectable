@@ -244,6 +244,15 @@ class SelectableGroup extends Component {
       className,
       selectingClassName,
       component: Component,
+
+      // Props not used for rendering, unpacking for restProps
+      onBeginSelection,
+      onEndSelection,
+      onSelection,
+      tolerance,
+      preventDefault,
+      onNonItemClick,
+
       ...restProps
     } = this.props;
     const { isBoxSelecting, boxLeft, boxTop, boxWidth, boxHeight } = this.state;

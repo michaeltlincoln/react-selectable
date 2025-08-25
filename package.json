@@ -1,14 +1,14 @@
 {
-  "name": "@herophilus/react-selectable",
+  "name": "@michaeltlincoln/react-selectable",
   "description": "forked react-selectable to use non-deprecated lifecycle methods",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "main": "dist/react-selectable.js",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/herophilus/react-selectable.git"
+    "url": "git+https://github.com/michaeltlincoln/react-selectable.git"
   },
   "scripts": {
     "build": "NODE_ENV=production node node_modules/webpack/bin/webpack",
