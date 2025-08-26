@@ -1,7 +1,7 @@
 {
   "name": "@michaeltlincoln/react-selectable",
   "description": "forked react-selectable to use non-deprecated lifecycle methods",
-  "version": "2.1.11",
+  "version": "2.1.12",
   "main": "dist/react-selectable.js",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
