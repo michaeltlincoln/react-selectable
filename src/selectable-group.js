@@ -199,9 +199,7 @@ class SelectableGroup extends Component {
     }
 
     // If the box is too small, it's not a drag, so we don't need to select anything
-    const w = Math.abs(this._mouseDownData.initialW - e.pageX + this._rect.x);
-    const h = Math.abs(this._mouseDownData.initialH - e.pageY + this._rect.y);
-    if (w > dragTolerance || h > dragTolerance) {
+    if (this.state.boxWidth > dragTolerance || this.state.boxHeight > dragTolerance) {
       this._selectElements(e, true);
     };
 
@@ -298,6 +296,8 @@ class SelectableGroup extends Component {
       overflow: "visible",
       ...restProps.style,
     };
+
+    console.log('isBoxSelecting', isBoxSelecting, this.selectionBoxRef.current)
 
     return (
       <Component
