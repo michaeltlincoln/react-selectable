@@ -216,7 +216,7 @@ class SelectableGroup extends Component {
     if (!_selectBox) return;
 
     // If the box is too small, it's not a drag, so we don't need to select anything
-    if (this.state.boxWidth < this.props.dragTolerance || this.state.boxHeight < this.props.dragTolerance) return;
+    if (this.state.boxWidth < this.props.dragTolerance && this.state.boxHeight < this.props.dragTolerance) return;
 
     this._registry.forEach((itemData) => {
       if (

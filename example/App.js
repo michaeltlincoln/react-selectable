@@ -1,5 +1,5 @@
 import React from 'react';
-import { SelectableGroup, createSelectable } from 'react-selectable';
+import { SelectableGroup, createSelectable } from '../src/index.js';
 import Album from './Album';
 
 const isNodeInRoot = (node, root) => {
@@ -23,13 +23,11 @@ class App extends React.Component {
 		this.state = {
 			selectedItems: [],
 			tolerance: 0,
-			selectOnMouseMove: false,
 		}
 
 		this.handleSelection = this.handleSelection.bind(this);
 		this.clearItems = this.clearItems.bind(this);
 		this.handleToleranceChange = this.handleToleranceChange.bind(this);
-		this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
 	}
 
 
@@ -50,24 +48,16 @@ class App extends React.Component {
 	}
 
 
-	clearItems (e) {
-		if(!isNodeInRoot(e.target, this.refs.selectable)) {
-			this.setState({
-				selectedItems: []
-			});
-		}
+	clearItems () {
+		this.setState({
+			selectedItems: []
+		});
 	}
 
 
 	handleToleranceChange (e) {
 		this.setState({
 			tolerance: parseInt(e.target.value)
-		});
-	}
-
-	toggleSelectOnMouseMove () {
-		this.setState({
-			selectOnMouseMove: !this.state.selectOnMouseMove
 		});
 	}
 
@@ -80,11 +70,6 @@ class App extends React.Component {
 						<strong>Tolerance</strong>: <span>{this.state.tolerance}</span><br/>
 						<em>The number of pixels that must be in the bounding box in order for an item to be selected.</em>
 						<p><input type="range" min="0" max="50" step="1" onChange={this.handleToleranceChange} value={this.state.tolerance} /></p>
-
-						<label>
-							<input type="checkbox" value={this.state.selectOnMouseMove} onChange={this.toggleSelectOnMouseMove} />
-							Select on mouse move
-						</label>
 
 						{this.state.selectedItems.length > 0 &&
 							<h3>You have selected the following items:</h3>
@@ -101,16 +86,15 @@ class App extends React.Component {
 				</div>
 				<SelectableGroup
 					className="main" 
-					ref="selectable"
-					onSelection={this.handleSelection} 
+					onEndSelection={this.handleSelection} 
 					tolerance={this.state.tolerance}
-					selectOnMouseMove={this.state.selectOnMouseMove}>
+				>
 				
 				{this.props.items.map((item, i) => {
-					const selected = this.state.selectedItems.indexOf(i) > -1;
+					const selected = this.state.selectedItems.indexOf(item) > -1;
 					return (
 						<SelectableAlbum
-							selectableKey={i}
+							selectableKey={item}
 							key={i} 
 							title={item.title} 
 							year={item.year} 
