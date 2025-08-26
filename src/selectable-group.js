@@ -251,6 +251,7 @@ class SelectableGroup extends Component {
       onEndSelection,
       onSelection,
       tolerance,
+      dragTolerance,
       preventDefault,
       onNonItemClick,
 
