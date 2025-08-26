@@ -198,7 +198,10 @@ class SelectableGroup extends Component {
       }
     }
 
-    this._selectElements(e, true);
+    // If the box is too small, it's not a drag, so we don't need to select anything
+    if (this.state.boxWidth > dragTolerance || this.state.boxHeight > dragTolerance) {
+      this._selectElements(e, true);
+    };
 
     this._mouseDownData = null;
     this.setState({
