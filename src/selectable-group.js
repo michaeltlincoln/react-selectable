@@ -183,7 +183,6 @@ class SelectableGroup extends Component {
     window.removeEventListener("mouseup", this._mouseUp);
 
     if (!this._mouseDownData) return;
-    if (this.state.boxWidth < this.props.dragTolerance || this.state.boxHeight < this.props.dragTolerance) return;
 
     // Mouse up when not box selecting is a heuristic for a "click"
     if (onNonItemClick && !isBoxSelecting) {
@@ -215,6 +214,9 @@ class SelectableGroup extends Component {
     const _selectBox = this.selectionBoxRef.current;
 
     if (!_selectBox) return;
+
+    // If the box is too small, it's not a drag, so we don't need to select anything
+    if (this.state.boxWidth < this.props.dragTolerance || this.state.boxHeight < this.props.dragTolerance) return;
 
     this._registry.forEach((itemData) => {
       if (
