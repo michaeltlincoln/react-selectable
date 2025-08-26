@@ -177,7 +177,7 @@ class SelectableGroup extends Component {
    * Called when the user has completed selection
    */
   _mouseUp(e) {
-    const { onNonItemClick, onDragEnd } = this.props;
+    const { onNonItemClick, onDragEnd, dragTolerance } = this.props;
     const { isBoxSelecting } = this.state;
 
     e.stopPropagation();
@@ -199,7 +199,9 @@ class SelectableGroup extends Component {
     }
 
     // If the box is too small, it's not a drag, so we don't need to select anything
-    if (this.state.boxWidth > this.props.dragTolerance || this.state.boxHeight > this.props.dragTolerance) {
+    const w = Math.abs(this._mouseDownData.initialW - e.pageX + this._rect.x);
+    const h = Math.abs(this._mouseDownData.initialH - e.pageY + this._rect.y);
+    if (w > dragTolerance || h > dragTolerance) {
       this._selectElements(e, true);
     };
 
