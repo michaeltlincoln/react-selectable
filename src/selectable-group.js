@@ -183,6 +183,7 @@ class SelectableGroup extends Component {
     window.removeEventListener("mouseup", this._mouseUp);
 
     if (!this._mouseDownData) return;
+    if (this.state.boxWidth < this.props.dragTolerance || this.state.boxHeight < this.props.dragTolerance) return;
 
     // Mouse up when not box selecting is a heuristic for a "click"
     if (onNonItemClick && !isBoxSelecting) {
@@ -357,6 +358,14 @@ SelectableGroup.propTypes = {
   tolerance: PropTypes.number,
 
   /**
+   * Amount of mouse movement needed before registering it as a drag, i.e. if only
+   * the mouse has moved 1px, it shouldn't be registered as a drag.
+   *
+   * @type {Number}
+   */
+  dragTolerance: PropTypes.number,
+
+  /**
    * In some cases, it the bounding box may need fixed positioning, if your layout
    * is relying on fixed positioned elements, for instance.
    *
@@ -401,6 +410,7 @@ SelectableGroup.propTypes = {
 SelectableGroup.defaultProps = {
   component: "div",
   tolerance: 0,
+  dragTolerance: 3,
   fixedPosition: false,
   preventDefault: true,
   enabled: true,
