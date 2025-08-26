@@ -117,16 +117,19 @@ class SelectableGroup extends Component {
    * be added, and if so, attach event listeners
    */
   _mouseDown(e) {
-    const { onBeginSelection, preventDefault } = this.props;
+    const { onBeginSelection, onDragStart, onDragEnd, preventDefault } = this.props;
 
     // Disable if target is control by react-dnd
     if (isNodeIn(e.target, (node) => !!node.draggable)) return;
+
+    if (onDragStart) onDragStart(e);
 
     // Allow onBeginSelection to cancel selection by return an explicit false
     if (
       typeof onBeginSelection === "function" &&
       onBeginSelection(e) === false
     ) {
+      if (onDragEnd) onDragEnd(e);
       return;
     }
 
@@ -174,13 +177,15 @@ class SelectableGroup extends Component {
    * Called when the user has completed selection
    */
   _mouseUp(e) {
-    const { onNonItemClick } = this.props;
+    const { onNonItemClick, onDragEnd } = this.props;
     const { isBoxSelecting } = this.state;
 
     e.stopPropagation();
 
     window.removeEventListener("mousemove", this._openSelector);
     window.removeEventListener("mouseup", this._mouseUp);
+
+    if (onDragEnd) onDragEnd(e);
 
     if (!this._mouseDownData) return;
 
@@ -193,7 +198,10 @@ class SelectableGroup extends Component {
       }
     }
 
-    this._selectElements(e, true);
+    // If the box is too small, it's not a drag, so we don't need to select anything
+    if (this.state.boxWidth > this.props.dragTolerance || this.state.boxHeight > this.props.dragTolerance) {
+      this._selectElements(e, true);
+    };
 
     this._mouseDownData = null;
     this.setState({
@@ -214,9 +222,6 @@ class SelectableGroup extends Component {
     const _selectBox = this.selectionBoxRef.current;
 
     if (!_selectBox) return;
-
-    // If the box is too small, it's not a drag, so we don't need to select anything
-    if (this.state.boxWidth < this.props.dragTolerance && this.state.boxHeight < this.props.dragTolerance) return;
 
     this._registry.forEach((itemData) => {
       if (
@@ -256,6 +261,8 @@ class SelectableGroup extends Component {
       dragTolerance,
       preventDefault,
       onNonItemClick,
+      onDragStart,
+      onDragEnd,
 
       ...restProps
     } = this.props;
@@ -343,6 +350,22 @@ SelectableGroup.propTypes = {
    * @param {MouseEvent} event - MouseEvent
    */
   onSelection: PropTypes.func,
+
+  /**
+   * Event that will fire when the user starts dragging
+   *
+   * @type {Function}
+   * @param {MouseEvent} event - MouseEvent
+   */
+  onDragStart: PropTypes.func,
+
+  /**
+   * Event that will fire when the user stops dragging
+   *
+   * @type {Function}
+   * @param {MouseEvent} event - MouseEvent
+   */
+  onDragEnd: PropTypes.func,
 
   /**
    * The component that will represent the Selectable DOM node
